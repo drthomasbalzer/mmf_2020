@@ -1,8 +1,9 @@
 ################
 ## Author: Thomas Balzer
-## (c) 2019
-## Material for MMF Stochastic Analysis - Fall 2019
+## (c) 2020
+## Material for MMF Stochastic Analysis - Fall 2020
 ################
+
 
 import numpy as np
 import math
