@@ -52,6 +52,7 @@ class PlotUtilities():
         plt.title(self.title)
 
         plt.show()
+        plt.close()
 
     ###############
     ##
@@ -76,6 +77,7 @@ class PlotUtilities():
             plt.hist(sample_data[k], num_bins, normed=True, alpha=_alpha)
 
         plt.show()
+        plt.close()
 
 
     def scatterPlot(self, x_values, y_values, labels, colors):
@@ -90,6 +92,7 @@ class PlotUtilities():
 
         plt.legend(prop={'size': 9})
         plt.show()
+        plt.close()
 
 
     ###############
@@ -116,6 +119,7 @@ class PlotUtilities():
         plt.title(self.title)
 
         plt.show()
+        plt.close()
 
     ###############
     ##
@@ -149,6 +153,7 @@ class PlotUtilities():
             plt.plot(x_ax, y_ax[k], color=colors[k])
 
         plt.show()
+        plt.close()
 
 
     def multiPlot(self, x_ax, y_ax, arg = ''):
@@ -175,4 +180,5 @@ class PlotUtilities():
             plt.plot(x_ax, y_ax[k], arg)
 
         plt.show()
+        plt.close()
 

@@ -159,7 +159,7 @@ if __name__ == '__main__':
     # hr =  [0.01, 0.025, 0.05, 0.075, 0.1, 0.125]
     simulated_default_time(times, hr, size)
 
-    calc_type = 2
+    calc_type = 5
 
     if (calc_type == 0):  ### uniform sample
         uniform_histogram(size)
@@ -173,8 +173,10 @@ if __name__ == '__main__':
         mean = 30.
         variance = 0.2
         normal_histogram(mean, variance, size)
-    else:  ### generate a lognormal distribution
+    elif (calc_type == 4):   ### generate a lognormal distribution
         mean = 100
         variance = 0.1
         lognormal_histogram(mean, variance, size)
+    else:
+        print ('Done')
 
