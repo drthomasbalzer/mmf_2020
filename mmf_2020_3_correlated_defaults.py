@@ -65,29 +65,29 @@ def plotVasicekDistribution(rhos, p, min_val, max_val, steps):
     mp = pu.PlotUtilities(chart_title, x_label, y_label)
     mp.multiPlot(x_ax, y_ax)
 
+
+def conditional_default_prob(rho, p, z):
+    nd = dist.NormalDistribution(0., 1.)
+    y = (nd.inverse_cdf(p) - np.sqrt(rho) * z) / np.sqrt(1 - rho)
+    return nd.cdf(y)
+
 class functorConditionalLossDist():
 
-    def __init__(self, rho, p, k, N):
+    def __init__(self, rho, p, k, N, usePoissonApprox = False):
 
         self.p = p
         self.rho = rho
         self.k = k
         self.N = N
+        self.usePoissonApprox = usePoissonApprox
 
     def pdf(self, z):
 
-        return conditional_binomial_prob(self.k, self.N, self.rho, self.p, z)
-
-def conditional_default_prob(rho, p, z):
-
-    nd = dist.NormalDistribution(0., 1.)
-    y = (nd.inverse_cdf(p) - np.sqrt(rho) * z) / np.sqrt(1 - rho)
-    return nd.cdf(y)
-
-def conditional_binomial_prob(k, N, rho, p, z):
-
-    p_z = conditional_default_prob(rho, p, z)
-    return (dist.binomial_pdf(p_z, k, N))
+        p_z = conditional_default_prob(self.rho, self.p, z)
+        if self.usePoissonApprox:
+            return dist.poisson_pdf(self.N * p_z, self.k)
+        else:
+            return dist.binomial_pdf(p_z, self.k, self.N)
 
 def portfolio_loss_histogram(rho, p, N, plotVsLHP = False):
 
@@ -98,14 +98,12 @@ def portfolio_loss_histogram(rho, p, N, plotVsLHP = False):
     pdf_v = [0.] * (N+1)
 
     for k in range(N+1):
-        pdf_func = functorConditionalLossDist(rho, p, k, N)
-        pdf_v[k] = gauss_hermite_integration_normalised(100, pdf_func.pdf)
+        pdf_func = functorConditionalLossDist(rho, p, k, N, False)
+        pdf_v[k] = gauss_hermite_integration_normalised(20, pdf_func.pdf)
 
     cdf_v = [sum([pdf_v[i] for i in range(k)]) for k in range(N+1)]
 
-    tot_plot = 1
-    if (plotVsLHP):
-        tot_plot = 2
+    tot_plot = 2 if plotVsLHP else 1
 
     plt.subplot(tot_plot, 1, 1)
 
@@ -171,7 +169,7 @@ def example_bivariate_option_price_mc(mean, variance, pd, pd_vol, strike, df):
 if __name__ == '__main__':
 
 
-    size = 500
+    size = 100
 
     rhos = [0.05, 0.1, 0.2, 0.5, 0.75]
     # -- portfolio loss distribution for finite case
