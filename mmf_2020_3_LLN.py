@@ -20,10 +20,7 @@ def binomial_lln(sample_size, p):
 
     ######
     ## Step 1 - create sample of independent uniform random variables
-
-    lower_bound = 0.
-    upper_bound = 1.
-    uni_sample = np.random.uniform(lower_bound, upper_bound, sample_size)
+    uni_sample = np.random.uniform(0., 1., sample_size)
 
     ######
     ## Step 2 - transform them to $B(1,p)$ distribution
@@ -103,8 +100,9 @@ if __name__ == '__main__':
 
     sz = 1000
     p = .75
-    binomial_lln(sz, p)
-    repeats = 2000
-    #binomial_clt_hist(sz, repeats, p)
+    #binomial_lln(sz, p)
+    repeats = 10000
+    #binomial_lln_hist(sz, repeats, p)
+    binomial_clt_hist(sz, repeats, p)
 
 
